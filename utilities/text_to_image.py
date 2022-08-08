@@ -6,6 +6,8 @@ from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
 
+temp = './save/temp.png'
+
 
 def text_wrap(text, fonts, font_size, max_width, width):
     font_1 = ImageFont.truetype(font=fonts, size=int(font_size * width * 0.001875))
@@ -29,27 +31,41 @@ def text_wrap(text, fonts, font_size, max_width, width):
     return lines
 
 
-def add_text_to_image(text, fonts, font_size, path, x, y, h, w):
-    colors = ["#" + "".join([random.choice("ABCDEF0123456789") for i in range(6)])]
-    colors = colors[0]
+def add_text_to_image(picture_path, template, fonts, font_size, path):
     img = Image.open(path)
-    img = img.convert("RGBA")
-    draw = ImageDraw.Draw(img)
-    width, height = img.size
-    font = ImageFont.truetype(font=fonts, size=int(font_size * width * 0.001875))
-    font_size1 = font_size
-    lines = text_wrap(text, fonts, font_size1, w, width)
-    while font.getsize(text)[1] * len(lines) > h:
-        font = ImageFont.truetype(font=fonts, size=int(font_size1 * width * 0.001875))
-        font_size1 -= 1
-        lines = text_wrap(text, fonts, font_size1, w, width)
+    img.save(temp)
+    for k, v in template.items():
+        if k == 'image':
+            bg = Image.open(path)
+            img2 = Image.open(picture_path).convert('RGBA')
+            img2 = img2.resize(template[k][1])
+            bg.paste(img2, template[k][0])
+            bg.save(temp)
+        else:
+            text = input(f"{k}: ")
+            w = template[k][1][0] - template[k][0][0]
+            h = template[k][1][1] - template[k][0][1]
+            x = template[k][0][0]
+            y = template[k][0][1]
+            colors = ["#" + "".join([random.choice("ABCDEF0123456789") for i in range(6)])]
+            colors = colors[0]
+            img = Image.open(temp)
+            img = img.convert("RGBA")
+            draw = ImageDraw.Draw(img)
+            width, height = img.size
+            font = ImageFont.truetype(font=fonts, size=int(font_size * width * 0.001875))
+            font_size1 = font_size
+            lines = text_wrap(text, fonts, font_size1, w, width)
+            while font.getsize(text)[1] * len(lines) > h:
+                font = ImageFont.truetype(font=fonts, size=int(font_size1 * width * 0.001875))
+                font_size1 -= 1
+                lines = text_wrap(text, fonts, font_size1, w, width)
 
-    width, height = font.getsize(lines[0])
+            width, height = font.getsize(lines[0])
 
-    y_text = int(y + h/2 - height * len(lines)/2)
-    for line in lines:
-        width, height = font.getsize(line)
-        draw.text((x, y_text), line, font=font, fill=colors)
-        y_text += height
-
-    img.save('./save/image.png')
+            y_text = int(y + h / 2 - height * len(lines) / 2)
+            for line in lines:
+                width, height = font.getsize(line)
+                draw.text((x, y_text), line, font=font, fill=colors)
+                y_text += height
+            img.save(temp)
