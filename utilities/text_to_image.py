@@ -1,3 +1,5 @@
+import re
+
 import cv2
 from tkinter import colorchooser
 import random
@@ -43,8 +45,10 @@ def add_text_to_image(picture_path, template, fonts, font_size, path):
             bg.save(temp)
         else:
             text = input(f"{k}: ")
+            regex_email = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
+            print(re.findall(regex_email, text))
             w = template[k][1][0] - template[k][0][0]
-            h = template[k][1][1] - template[k][0][1]
+            h = template[k][1][1] - template[ks][0][1]
             x = template[k][0][0]
             y = template[k][0][1]
             colors = ["#" + "".join([random.choice("ABCDEF0123456789") for i in range(6)])]

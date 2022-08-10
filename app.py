@@ -7,22 +7,22 @@ from utilities import text_to_image
 path = "./image/515958.jpg"
 path_save = "./image/demo.png"
 fonts = './fonts/roboto-Black.ttf'
-image_path = "./image/5c7c71feb51b6.png"
+image_path = "./image/plumber-with-his-arms-crossed.jpg"
 
 template_1 = {"header": [(5, 5), (694, 73)],
               "image": [(5, 79), (322, 760)],
               "description": [(327, 79), (694, 760)],
               "footer": [(5, 766), (694, 894)]}
 
-template_2 = {"image": [(5, 5), (694, 296)],
-              "header": [(5, 300), (693, 429)],
-              "description": [(5, 429), (694, 761)],
-              "footer": [(5, 766), (694, 894)]}
+template_2 = {"image": [(5, 5), (990, 345)],
+              "header": [(5, 350), (995, 495)],
+              "description": [(5, 500), (990, 800)],
+              "footer": [(5, 800), (995, 895)]}
 
-template_3 = {'image': [(5, 5), (360, 894)],
-              "header": [(364, 5), (990, 140)],
-              "description": [(365, 150), (990, 720)],
-              "footer": [(365, 730), (995, 890)]}
+template_3 = {'image': [(5, 5), (460, 894)],
+              "header": [(465, 5), (990, 140)],
+              "description": [(465, 150), (990, 720)],
+              "footer": [(465, 730), (995, 890)]}
 
 img = Image.open(path)
 img = img.resize((1000, 900))
