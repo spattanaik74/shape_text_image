@@ -1,14 +1,9 @@
 import re
-
-import cv2
-from tkinter import colorchooser
 import random
 
 from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
-
-temp = './save/temp.png'
 
 
 def text_wrap(text, fonts, font_size, max_width, width):
@@ -33,7 +28,7 @@ def text_wrap(text, fonts, font_size, max_width, width):
     return lines
 
 
-def add_text_to_image(picture_path, template, fonts, font_size, path):
+def add_text_to_image(picture_path, template, fonts, font_size, path, temp):
     img = Image.open(path)
     img.save(temp)
     for k, v in template.items():
@@ -46,9 +41,10 @@ def add_text_to_image(picture_path, template, fonts, font_size, path):
         else:
             text = input(f"{k}: ")
             regex_email = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
-            print(re.findall(regex_email, text))
+            word = re.findall(regex_email, text)[0][0]
+            # print(word)
             w = template[k][1][0] - template[k][0][0]
-            h = template[k][1][1] - template[ks][0][1]
+            h = template[k][1][1] - template[k][0][1]
             x = template[k][0][0]
             y = template[k][0][1]
             colors = ["#" + "".join([random.choice("ABCDEF0123456789") for i in range(6)])]
@@ -64,12 +60,32 @@ def add_text_to_image(picture_path, template, fonts, font_size, path):
                 font = ImageFont.truetype(font=fonts, size=int(font_size1 * width * 0.001875))
                 font_size1 -= 1
                 lines = text_wrap(text, fonts, font_size1, w, width)
-
+            print(lines)
             width, height = font.getsize(lines[0])
-
+            count = 0
             y_text = int(y + h / 2 - height * len(lines) / 2)
             for line in lines:
-                width, height = font.getsize(line)
-                draw.text((x, y_text), line, font=font, fill=colors)
+                if word in line:
+                    list_1 = line.split()
+                    print(list_1)
+                    count = 0
+                    for i in list_1:
+                        width_font, height_font = font.getsize(i)
+                        print(f'width_font: {width_font}')
+                        print(i)
+                        if i == word:
+                            draw.text((x + count, y_text), i, font=font, fill='#FF0000')
+                            count += width_font + 10
+                        else:
+                            draw.text((x + count, y_text), i, font=font, fill=colors)
+                            count += width_font + 10
+
+                else:
+                    draw.text((x, y_text), line, font=font, fill=colors)
                 y_text += height
             img.save(temp)
+
+# if word in line:
+#     draw.text((x, y_text), line[0:15], font=font, fill=colors)
+#     draw.text((x+240, y_text), line[16:40], font=font, fill='#FF0000')
+#     draw.text((x+600, y_text), line[40:], font=font, fill=colors)

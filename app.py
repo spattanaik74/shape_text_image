@@ -1,28 +1,18 @@
-from PIL import Image
 import cv2
+import random
 import matplotlib.pyplot as plt
+from PIL import Image
 
 from utilities import text_to_image
+from template import Template
 
 path = "./image/515958.jpg"
 path_save = "./image/demo.png"
 fonts = './fonts/roboto-Black.ttf'
-image_path = "./image/plumber-with-his-arms-crossed.jpg"
+image_path = "./image/cheerful-asian-plumber-sitting-floor-repairing-kitchen-sink (2).jpg"
+save_image = "./save/save_image/"
+temp = './save/temp folder/temp.png'
 
-template_1 = {"header": [(5, 5), (694, 73)],
-              "image": [(5, 79), (322, 760)],
-              "description": [(327, 79), (694, 760)],
-              "footer": [(5, 766), (694, 894)]}
-
-template_2 = {"image": [(5, 5), (990, 345)],
-              "header": [(5, 350), (995, 495)],
-              "description": [(5, 500), (990, 800)],
-              "footer": [(5, 800), (995, 895)]}
-
-template_3 = {'image': [(5, 5), (460, 894)],
-              "header": [(465, 5), (990, 140)],
-              "description": [(465, 150), (990, 720)],
-              "footer": [(465, 730), (995, 890)]}
 
 img = Image.open(path)
 img = img.resize((1000, 900))
@@ -35,12 +25,17 @@ img.save(path_save)
 # bg.save('result.png')
 
 img2 = cv2.imread(path_save)
-# cv2.rectangle(img2, template_3['header'][0], template_3['header'][1], (0, 0, 255), 2)
-# cv2.rectangle(img2, template_3['image'][0], template_3['image'][1], (0, 0, 255), 2)
-# cv2.rectangle(img2, template_3['description'][0], template_3['description'][1], (0, 0, 255), 2)
-# cv2.rectangle(img2, template_3['footer'][0], template_3['footer'][1], (0, 0, 255), 2)
+# cv2.rectangle(img2, template_2['header'][0], template_2['header'][1], (0, 0, 255), 2)
+# cv2.rectangle(img2, template_2['image'][0], template_2['image'][1], (0, 0, 255), 2)
+# cv2.rectangle(img2, template_2['description'][0], template_2['description'][1], (0, 0, 255), 2)
+# cv2.rectangle(img2, template_2['footer'][0], template_2['footer'][1], (0, 0, 255), 2)
 #
 # plt.imshow(img2)
 # plt.show()
 
-text_to_image.add_text_to_image(image_path, template_3, fonts, font_size=65, path=path_save)
+if __name__ == '__main__':
+    text_to_image.add_text_to_image(image_path, Template.template_2, fonts, font_size=65, path=path_save, temp=temp)
+    save_1 = Image.open(temp)
+    save_1.save(save_image + str(random.randint(0, 99999999))+'.png')
+
+
