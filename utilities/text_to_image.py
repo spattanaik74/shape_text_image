@@ -41,8 +41,14 @@ def add_text_to_image(picture_path, template, fonts, font_size, path, temp):
         else:
             text = input(f"{k}: ")
             regex_email = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
-            word = re.findall(regex_email, text)[0][0]
-            # print(word)
+            word_tuple = re.findall(regex_email, text)
+            # print(f"word_typle: {word_tuple}")
+            if len(word_tuple) == 0:
+                word_set = ''
+            else:
+                word_set = max(word_tuple[0])
+            # word_set = max(word_tuple[0])
+            print(f"word: {word_set}")
             w = template[k][1][0] - template[k][0][0]
             h = template[k][1][1] - template[k][0][1]
             x = template[k][0][0]
@@ -60,32 +66,33 @@ def add_text_to_image(picture_path, template, fonts, font_size, path, temp):
                 font = ImageFont.truetype(font=fonts, size=int(font_size1 * width * 0.001875))
                 font_size1 -= 1
                 lines = text_wrap(text, fonts, font_size1, w, width)
-            print(lines)
+            # print(lines)
             width, height = font.getsize(lines[0])
             count = 0
             y_text = int(y + h / 2 - height * len(lines) / 2)
-            for line in lines:
-                if word in line:
-                    list_1 = line.split()
-                    print(list_1)
-                    count = 0
-                    for i in list_1:
-                        width_font, height_font = font.getsize(i)
-                        print(f'width_font: {width_font}')
-                        print(i)
-                        if i == word:
-                            draw.text((x + count, y_text), i, font=font, fill='#FF0000')
-                            count += width_font + 10
-                        else:
-                            draw.text((x + count, y_text), i, font=font, fill=colors)
-                            count += width_font + 10
+            if len(word_set) != 0:
+                for line in lines:
+                    if word_set in line:
+                        list_1 = line.split()
+                        count = 0
+                        for i in list_1:
+                            width_font, height_font = font.getsize(i)
+                            # print(f'width_font: {width_font}')
+                            # print(i)
+                            if i == word_set:
+                                draw.text((x + count, y_text), i, font=font, fill='#FF0000')
+                                count += width_font + 10
+                            else:
+                                draw.text((x + count, y_text), i, font=font, fill=colors)
+                                count += width_font + 10
 
-                else:
+                    else:
+                        draw.text((x, y_text), line, font=font, fill=colors)
+                    y_text += height
+            else:
+                for line in lines:
+                    width, height = font.getsize(line)
                     draw.text((x, y_text), line, font=font, fill=colors)
-                y_text += height
-            img.save(temp)
+                    y_text += height
 
-# if word in line:
-#     draw.text((x, y_text), line[0:15], font=font, fill=colors)
-#     draw.text((x+240, y_text), line[16:40], font=font, fill='#FF0000')
-#     draw.text((x+600, y_text), line[40:], font=font, fill=colors)
+            img.save(temp)
