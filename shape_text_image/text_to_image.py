@@ -79,10 +79,12 @@ class TextToImage:
                 draw = ImageDraw.Draw(img)
                 width, height = img.size
                 _font = ImageFont.truetype(font=self.font, size=int(self.font_size * width * 0.001875))
+                # _font = ImageFont.truetype(font=self.font, size=int(self.font_size))
                 _font_size = self.font_size
                 lines = self._text_wrap(text, self.font, _font_size, w, width)
                 while _font.getsize(text)[1] * len(lines) > h:
                     _font = ImageFont.truetype(font=self.font, size=int(_font_size * width * 0.001875))
+                    # _font = ImageFont.truetype(font=self.font, size=int(_font_size))
                     _font_size -= 1
                     lines = self._text_wrap(text, self.font, _font_size, w, width)
                 # print(lines)

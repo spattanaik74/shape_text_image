@@ -4,6 +4,7 @@ from PIL import Image
 
 from shape_text_image import text_to_image
 from shape_text_image import config
+from shape_text_image.config import TemplateConfig
 
 path = "../tests/resources/image/515958.jpg"
 base_path = "../shape_text_image/base_template/base.png"
@@ -35,10 +36,10 @@ img2 = cv2.imread(base_path)
 # plt.show()
 
 if __name__ == '__main__':
-    text_image = text_to_image.TextToImage(base_template=base_path, template=config.TemplateConfig.template_landscape, font=fonts, image_path=image_path, output_path=temp,
+    text_image = text_to_image.TextToImage(base_template=base_path, template=TemplateConfig().get_template("TEMPLATE_LANDSCAPE"), font=fonts, image_path=image_path, output_path=temp,
                                            header=header, desc=desc, footer=footer, font_size=65)
     text_image.convert()
     save_1 = Image.open(temp)
     save_1.save(save_image + str(random.randint(0, 99999999))+'.png')
 
-
+#
